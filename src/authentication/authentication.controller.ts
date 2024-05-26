@@ -2,8 +2,8 @@ import { AuthenticationService } from './authentication.service';
 import { Body, Controller, Post } from '@nestjs/common';
 import {
   AuthenticationLoginDto,
-  AuthenticationForgetDto,
-  AuthenticationResetDto,
+  // AuthenticationForgetDto,
+  // AuthenticationResetDto,
 } from './dto/authentication.dto';
 
 @Controller('authentication')
@@ -14,13 +14,13 @@ export class AuthenticationController {
     return this.authenticationService.login(body.email, body.password);
   }
 
-  @Post('forget')
-  async forget(@Body() body: AuthenticationForgetDto) {
-    return this.authenticationService.forget(body.email);
-  }
+  // @Post('forget')
+  // async forget(@Body() body: AuthenticationForgetDto) {
+  //   return this.authenticationService.forget(body.email);
+  // }
 
-  @Post('reset')
-  async reset(@Body() body: AuthenticationResetDto) {
-    return this.authenticationService.reset(body.password, body.token);
-  }
+  // @Post('reset')
+  // async reset(@Body() body: AuthenticationResetDto) {
+  //   return this.authenticationService.reset(body.password, body.token);
+  // }
 }
