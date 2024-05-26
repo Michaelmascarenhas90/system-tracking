@@ -20,12 +20,33 @@ export class VehicleService {
   }
 
   async findAll(userId: string, paginationQuery: PaginationQueryDto) {
-    const { limit = 10, offset = 0 } = paginationQuery;
-    return this.prisma.vehicle.findMany({
-      where: { userId, deletedAt: null },
-      skip: offset,
-      take: limit,
-    });
+    const { limit, offset } = paginationQuery;
+
+    const take = limit ? parseInt(limit.toString(), 10) : 10;
+    const skip = offset ? parseInt(offset.toString(), 10) : 0;
+
+    const [vehicles, count] = await this.prisma.$transaction([
+      this.prisma.vehicle.findMany({
+        where: { userId, deletedAt: null },
+        skip,
+        take,
+      }),
+      this.prisma.vehicle.count({
+        where: { userId, deletedAt: null },
+      }),
+    ]);
+
+    const pages = Math.ceil(count / take);
+    const nextPage = offset + limit < count ? offset + limit : null;
+    const currentStep = offset / limit + 1;
+
+    return {
+      data: vehicles,
+      count,
+      pages,
+      nextPage,
+      currentStep,
+    };
   }
 
   async findOne(id: string, userId: string) {

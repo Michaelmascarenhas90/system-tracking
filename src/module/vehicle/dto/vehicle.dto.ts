@@ -13,8 +13,8 @@ export class CreateVehicleDto {
   @IsString()
   model: string;
 
-  @IsString()
-  year: string;
+  // @IsString()
+  // year: string;
 }
 
 export class UpdateVehicleDto extends PartialType(CreateVehicleDto) {}

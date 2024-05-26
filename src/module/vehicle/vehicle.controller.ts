@@ -2,13 +2,13 @@ import {
   Controller,
   Get,
   Post,
-  Put,
   Delete,
   Param,
   Body,
   UseGuards,
   Req,
   Query,
+  Patch,
 } from '@nestjs/common';
 import { VehicleService } from './vehicle.service';
 import { CreateVehicleDto, UpdateVehicleDto } from './dto/vehicle.dto';
@@ -38,7 +38,7 @@ export class VehicleController {
     return this.vehicleService.findOne(id, userId);
   }
 
-  @Put(':id')
+  @Patch(':id')
   async update(
     @Param('id') id: string,
     @Body() updateVehicleDto: UpdateVehicleDto,
