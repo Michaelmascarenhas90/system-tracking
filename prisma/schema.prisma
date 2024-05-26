@@ -1,0 +1,85 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String    @id @default(uuid())
+  email     String    @unique
+  name      String?
+  password  String
+  vehicles  Vehicle[]
+  createdAt DateTime
+  updatedAt DateTime?
+  deletedAt DateTime?
+}
+
+model Vehicle {
+  id                 String           @id @default(uuid())
+  userId             String
+  plate              String
+  model              String
+  trackingDevices    TrackingDevice[]
+  driverAssociations DriverVehicle[]
+  User               User             @relation(fields: [userId], references: [id])
+  createdAt          DateTime
+  updatedAt          DateTime?
+  deletedAt          DateTime?
+}
+
+model TrackingDevice {
+  id         String            @id @default(uuid())
+  vehicleId  String
+  identifier String
+  status     String
+  histories  TrackingHistory[]
+  Vehicle    Vehicle           @relation(fields: [vehicleId], references: [id])
+  createdAt  DateTime
+  updatedAt  DateTime?
+  deletedAt  DateTime?
+}
+
+model TrackingHistory {
+  id             String         @id @default(uuid())
+  deviceId       String
+  timestamp      DateTime
+  latitude       Float
+  longitude      Float
+  TrackingDevice TrackingDevice @relation(fields: [deviceId], references: [id])
+  createdAt      DateTime
+  updatedAt      DateTime?
+  deletedAt      DateTime?
+}
+
+model Driver {
+  id           String          @id @default(uuid())
+  name         String
+  cpf          String          @unique
+  associations DriverVehicle[]
+  createdAt    DateTime
+  updatedAt    DateTime?
+  deletedAt    DateTime?
+}
+
+model DriverVehicle {
+  id        String    @id @default(uuid())
+  vehicleId String
+  driverId  String
+  startDate DateTime
+  endDate   DateTime?
+  Vehicle   Vehicle   @relation(fields: [vehicleId], references: [id])
+  Driver    Driver    @relation(fields: [driverId], references: [id])
+  createdAt DateTime
+  updatedAt DateTime?
+  deletedAt DateTime?
+}
