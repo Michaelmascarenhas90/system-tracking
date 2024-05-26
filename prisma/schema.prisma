@@ -31,7 +31,7 @@ model Vehicle {
   model              String
   trackingDevices    TrackingDevice[]
   driverAssociations DriverVehicle[]
-  User               User             @relation(fields: [userId], references: [id])
+  user               User             @relation(fields: [userId], references: [id])
   createdAt          DateTime
   updatedAt          DateTime?
   deletedAt          DateTime?
