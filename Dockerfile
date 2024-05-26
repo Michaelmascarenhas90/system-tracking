@@ -1,13 +1,25 @@
-FROM 22-alpine
+# Use a imagem base do Node.js
+FROM node:20-alpine
 
-WORKDIR /api
+# Defina o diretório de trabalho
+WORKDIR /app
 
-COPY package.json package-lock.json
+# Copie os arquivos de dependências
+COPY package*.json ./
 
+# Instale o Git
+RUN apk add --no-cache git
+
+# Instale as dependências do projeto
 RUN npm install
 
-COPY src/ .
+# Copie o restante do código da aplicação
+COPY . .
 
+RUN npx prisma generate
+
+# Exponha a porta que a aplicação irá rodar (por exemplo, 3000)
 EXPOSE 3000
 
-CMD [ "npm", "start" ]
+# Comando para iniciar a aplicação
+CMD ["npm", "start"]

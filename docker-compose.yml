@@ -3,8 +3,22 @@ version: '3.8'
 services:
   api:
     build: .
+    image: docker_system_tracking_api:latest
     ports:
       - "3000:3000"
+    depends_on:
+      - postgres
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./
+          target: /app
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: action
+    networks:
+      - postgres_network
   postgres:
     image: postgres:13
     restart: always
