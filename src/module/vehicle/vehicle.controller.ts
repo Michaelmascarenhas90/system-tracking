@@ -23,6 +23,8 @@ export class VehicleController {
   @Post()
   async create(@Req() req, @Body() createVehicleDto: CreateVehicleDto) {
     const userId = req.user.id;
+
+    // console.log('bateu aqui', userId);
     return this.vehicleService.create(userId, createVehicleDto);
   }
 

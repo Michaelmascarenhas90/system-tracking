@@ -8,12 +8,14 @@ import { AuthenticationModule } from './authentication/authentication.module';
 import { VehicleModule } from './module/vehicle/vehicle.module';
 // import { AuthGuard } from './guard/auth.guard';
 import { JwtModule } from '@nestjs/jwt';
+import { TrackingDeviceModule } from './module/tracking-device/tracking-device.module';
 
 @Module({
   imports: [
     UserModule,
     AuthenticationModule,
     VehicleModule,
+    TrackingDeviceModule,
     JwtModule.register({
       global: true, // Torna o módulo global
       secret: process.env.JWT_SECRET,
