@@ -33,9 +33,12 @@ export class TrackingDeviceController {
     );
   }
 
-  @Get()
-  async findAll(@Query() paginationQuery: PaginationQueryDto) {
-    return this.trackingDeviceService.findAll(paginationQuery);
+  @Get(':id')
+  async findAll(
+    @Param('id') vehicleId: string,
+    @Query() paginationQuery: PaginationQueryDto,
+  ) {
+    return this.trackingDeviceService.findAll(vehicleId, paginationQuery);
   }
 
   @Get(':id')

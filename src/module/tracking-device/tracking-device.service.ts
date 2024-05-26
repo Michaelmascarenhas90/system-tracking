@@ -28,12 +28,13 @@ export class TrackingDeviceService {
     });
   }
 
-  async findAll(paginationQuery: PaginationQueryDto) {
-    const { limit = 10, offset = 0 } = paginationQuery;
+  async findAll(vehicleId: string, paginationQuery: PaginationQueryDto) {
+    const { limit = 10, offset = 1 } = paginationQuery;
     const [devices, count] = await this.prisma.$transaction([
       this.prisma.trackingDevice.findMany({
-        skip: offset,
-        take: limit,
+        where: { vehicleId },
+        skip: Number(offset),
+        take: Number(limit),
       }),
       this.prisma.trackingDevice.count(),
     ]);
@@ -67,6 +68,16 @@ export class TrackingDeviceService {
   }
 
   async remove(id: string) {
-    return this.prisma.trackingDevice.delete({ where: { id } });
+    const history = await this.findOne(id);
+
+    if (!history) {
+      throw new NotFoundException(`Rastreador com ID ${id} não encontrado.`);
+    }
+    return this.prisma.trackingDevice.update({
+      where: { id },
+      data: {
+        deletedAt: new Date(),
+      },
+    });
   }
 }
