@@ -33,15 +33,23 @@ export class TrackingHistoryService {
     const { limit = 10, offset = 1 } = paginationQuery;
     const [historys, count] = await this.prisma.$transaction([
       this.prisma.trackingHistory.findMany({
-        where: { deviceId },
+        where: {
+          deviceId,
+          deletedAt: null,
+        },
         skip: Number(offset),
         take: Number(limit),
       }),
-      this.prisma.trackingHistory.count(),
+      this.prisma.trackingHistory.count({
+        where: {
+          deviceId,
+          deletedAt: null,
+        },
+      }),
     ]);
     const pages = Math.ceil(count / limit);
     const nextPage = offset + limit < count ? offset + limit : null;
-    const currentStep = offset / limit + 1;
+    const currentStep = Math.ceil(offset / limit + 1);
     return {
       data: historys,
       count,

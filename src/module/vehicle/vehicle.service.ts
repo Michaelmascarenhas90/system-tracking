@@ -38,7 +38,7 @@ export class VehicleService {
 
     const pages = Math.ceil(count / take);
     const nextPage = offset + limit < count ? offset + limit : null;
-    const currentStep = offset / limit + 1;
+    const currentStep = Math.ceil(offset / limit + 1);
 
     return {
       data: vehicles,
