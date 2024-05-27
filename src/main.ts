@@ -6,7 +6,7 @@ import * as dotenv from 'dotenv';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   dotenv.config();
-  app.enableCors();
+  app.enableCors({ origin: true });
 
   app.useGlobalPipes(new ValidationPipe());
   // de acordo com doc do prisma e do nest, agora é necessário para os escutadores de eventos de encerramento funcionarem
